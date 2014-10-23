@@ -1,4 +1,4 @@
-package practica1;
+package logica;
 
 public class Tablero {
 	private Ficha [][] tablero;
@@ -33,16 +33,36 @@ public class Tablero {
 		return i;
 	}
 	
-	public int cuatroEnLinea(Ficha color, int col, int altura){
-		int i = altura;
-		while(i >= 0 && this.tablero[i][col] == color){
-			i--;
-		}
-		return i;
-	}
-	
 	public void setFicha(Ficha ficha, int col, int altura){
 		this.tablero[altura][col] = ficha;
+	}
+	
+	public boolean hayGrupo(){
+		boolean hayGrupo = false;
+		int consecutivos = 0;
+		for(int i = 0; i < this.alto; i++){
+			for(int j = 0; j < this.ancho; j++){
+				if((j+1 < this.ancho) && this.tablero[i][j] == this.tablero[i][j+1] && this.tablero[i][j] != Ficha.VACIA){ 
+	                consecutivos = 0;
+					while((j+consecutivos < this.ancho-1) && this.tablero[i][j] == this.tablero[i][j+consecutivos]){ 
+	                    consecutivos++; 
+	                } 
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i][j+1]){ 
+	                    hayGrupo = true; 
+	                } 
+	            } 
+	            else if((i+1 < this.alto) && this.tablero[i][j] == this.tablero[i+1][j] && this.tablero[i][j] != Ficha.VACIA){ 
+	                consecutivos = 0; 
+	                while((i+consecutivos < this.alto) && this.tablero[i][j] == this.tablero[i+consecutivos][j]){ 
+	                    consecutivos++; 
+	                }  
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i+1][j]){ 
+	                    hayGrupo = true; 
+	                } 
+	            } 
+			}
+		}
+		return hayGrupo;
 	}
 	
 	public String toString(){
