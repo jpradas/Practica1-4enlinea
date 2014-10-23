@@ -1,13 +1,15 @@
-package practica1;
+package main;
+import java.util.Scanner;
+import logica.Partida;
+import control.Controlador;
 
 public class Main {
-	private static java.util.Scanner in = new java.util.Scanner(System.in);
-	private static Partida partida = new Partida();
-	
+	private static Scanner in = new Scanner(System.in);
+
 	public static void main(String[] args) {
+		Partida partida = new Partida();
 		Controlador c = new Controlador(partida,in);
 		c.run();
-		in.close();
 	}
 
 }
