@@ -1,4 +1,4 @@
-package practica1;
+package logica;
 
 public class Partida {
 	private Tablero tablero;
@@ -63,7 +63,7 @@ public class Partida {
 					this.terminada = true;
 					this.ganador = Ficha.VACIA;
 				}
-				if(this.tablero.cuatroEnLinea(this.turno,col, FILAS - 1) == 1){
+				if(this.tablero.hayGrupo()){
 					this.terminada = true;
 					this.ganador = this.turno;
 				}
@@ -83,6 +83,7 @@ public class Partida {
 		return moValido;
 	}
 	
+	
 	public String toString(){
 		String mensaje = this.tablero.toString();
 		String nuevalinea = System.getProperty("line.separator");
@@ -96,5 +97,4 @@ public class Partida {
 		return mensaje = mensaje + nuevalinea + "Juegan " + ficha;
 	
 	}
-	
 }
