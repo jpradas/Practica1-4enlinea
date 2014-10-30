@@ -1,0 +1,45 @@
+public boolean hayGrupo(){
+		boolean hayGrupo = false;
+		int consecutivos = 0;
+		for(int i = 0; i < this.alto; i++){
+			for(int j = 0; j < this.ancho; j++){
+				if((j+1 < this.ancho) && this.tablero[i][j] == this.tablero[i][j+1] && this.tablero[i][j] != Ficha.VACIA){ 
+	                consecutivos = 0;
+					while((j+consecutivos < this.ancho-1) && this.tablero[i][j] == this.tablero[i][j+consecutivos]){ 
+	                    consecutivos++; 
+	                } 
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i][j+1]){ 
+	                    hayGrupo = true; 
+	                } 
+	            }
+				else if((j+1 < this.ancho-3) && (i+1 < this.alto-2) && this.tablero[i][j] == this.tablero[i+1][j+1] && this.tablero[i][j] != Ficha.VACIA){
+					consecutivos = 0;
+					while((j+consecutivos < this.ancho-4) && (i+consecutivos < this.alto-3) && this.tablero[i][j] == this.tablero[i+consecutivos][j+consecutivos]){
+						consecutivos++;
+					}
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i+1][j+1]){ 
+	                    hayGrupo = true; 
+	                }
+				}
+				else if((this.ancho-1-j > 2) && (i+1 < this.alto-2) && this.tablero[i][this.ancho-1-j] == this.tablero[i+1][this.ancho-1-j-1] && this.tablero[i][this.ancho-1-j] != Ficha.VACIA){
+					consecutivos = 0;
+					while((this.ancho-1-j-consecutivos > 2) && (i+consecutivos < this.alto-3) && this.tablero[i][j] == this.tablero[i+consecutivos][this.ancho-1-j-consecutivos]){
+						consecutivos++;
+					}
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i+1][this.ancho-1-j-1]){ 
+	                    hayGrupo = true; 
+	                }
+				}
+	            else if((i+1 < this.alto) && this.tablero[i][j] == this.tablero[i+1][j] && this.tablero[i][j] != Ficha.VACIA){ 
+	                consecutivos = 0; 
+	                while((i+consecutivos < this.alto) && this.tablero[i][j] == this.tablero[i+consecutivos][j]){ 
+	                    consecutivos++; 
+	                }  
+	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i+1][j]){ 
+	                    hayGrupo = true; 
+	                } 
+	            } 
+			}
+		}
+		return hayGrupo;
+	}
