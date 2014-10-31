@@ -1,6 +1,8 @@
-package practica1;
+package control;
 
 import java.util.Scanner;
+import logica.Ficha;
+import logica.Partida;
 
 public class Controlador {
 	private Partida partida;
