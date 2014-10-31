@@ -1,9 +1,23 @@
 package logica;
 
+
 public class Tablero {
+	
+	/**
+	 * @param tablero El atributo tablero crea una matriz tablero de fichas, por lo cual cada posición de la matriz tendrá un valor del enumerado Ficha.
+	 * @param alto	El atributo alto nos indica el número de filas que tiene el tablero.
+	 * @param ancho	El atributo ancho nos indica el número de columnas que tiene el tablero.
+	 */
+	
 	private Ficha [][] tablero;
 	private int ancho;  // COLUMNAS
 	private int alto;   // FILAS
+	
+	/**
+	 * La constructora Tablero crea el tablero con enumerados del tipo Ficha e inicializa los atributos privados alto y ancho al valor de la matriz creada.
+	 * @param alto	El parámetro alto indica la altura que tendrá el tablero.
+	 * @param ancho	El parámetro ancho indica la anchura que tendrá el tablero.
+	 */
 	
 	public Tablero(int alto, int ancho){
 		this.tablero = new Ficha [alto][ancho];
@@ -11,6 +25,10 @@ public class Tablero {
 		this.alto = alto;
 	}
 	
+	/**
+	 * El método reset reinicia el tablero a su valor inicial, es decir, todas las casillas marcan la ficha VACIA.
+	 */
+
 	public void reset(){
 		for (int i = 0; i < this.alto; i++){
 			for (int j = 0; j < this.ancho; j++){
@@ -18,6 +36,23 @@ public class Tablero {
 			}
 		}
 	}
+	
+	/**
+	 * El método getFicha devuelve una ficha del tablero en una posición indicada previamente por altura y columna.
+	 * @param altura El parámetro altura le indica al método la fila en la que ha de recoger la ficha.
+	 * @param columna El parámetro columna le indica al método la columna en la que ha de recoger la ficha
+	 * @return	retorna una ficha
+	 */
+	
+	public Ficha getFicha(int altura, int columna){
+		return this.tablero[altura][columna];
+	}
+	
+	/**
+	 * El método devolver altura devuelve la ultima altura ocupada en la matriz, en caso de ser 0 la columna quiere decir que esta al completo.
+	 * @param col	Indica la columna a mirar para revisar su altura.
+	 * @return	retorna la ultima altura desocupada (en caso de haberla) y si no devuelve un 0.
+	 */
 	
 	public int devolverAlturaDesocupada(int col){
 		int i = this.alto - 1;
@@ -33,37 +68,20 @@ public class Tablero {
 		return i;
 	}
 	
+	/**
+	 * El método setFicha coloca una ficha en una determinada posición del tablero.
+	 * @param ficha	Es la ficha que ha de colocar en el tablero.
+	 * @param col	Columna en la cual ha de colocar la ficha.
+	 * @param altura	Altura a la cual ha de colocar la ficha.
+	 */
+	
 	public void setFicha(Ficha ficha, int col, int altura){
 		this.tablero[altura][col] = ficha;
 	}
 	
-	public boolean hayGrupo(){
-		boolean hayGrupo = false;
-		int consecutivos = 0;
-		for(int i = 0; i < this.alto; i++){
-			for(int j = 0; j < this.ancho; j++){
-				if((j+1 < this.ancho) && this.tablero[i][j] == this.tablero[i][j+1] && this.tablero[i][j] != Ficha.VACIA){ 
-	                consecutivos = 0;
-					while((j+consecutivos < this.ancho-1) && this.tablero[i][j] == this.tablero[i][j+consecutivos]){ 
-	                    consecutivos++; 
-	                } 
-	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i][j+1]){ 
-	                    hayGrupo = true; 
-	                } 
-	            } 
-	            else if((i+1 < this.alto) && this.tablero[i][j] == this.tablero[i+1][j] && this.tablero[i][j] != Ficha.VACIA){ 
-	                consecutivos = 0; 
-	                while((i+consecutivos < this.alto) && this.tablero[i][j] == this.tablero[i+consecutivos][j]){ 
-	                    consecutivos++; 
-	                }  
-	                if(consecutivos >= 4 && this.tablero[i][j] == this.tablero[i+1][j]){ 
-	                    hayGrupo = true; 
-	                } 
-	            } 
-			}
-		}
-		return hayGrupo;
-	}
+	/**
+	 * El método toString devuelve la informacion de la clase tablero en forma de String.
+	 */
 	
 	public String toString(){
 		String mensaje = "";
