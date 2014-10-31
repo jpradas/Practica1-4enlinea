@@ -1,5 +1,6 @@
 package logica;
 
+
 public class Partida {
 	private Tablero tablero;
 	private Ficha turno = Ficha.BLANCA;
@@ -63,7 +64,7 @@ public class Partida {
 					this.terminada = true;
 					this.ganador = Ficha.VACIA;
 				}
-				if(this.tablero.hayGrupo()){
+				if(hayGrupo()){
 					this.terminada = true;
 					this.ganador = this.turno;
 				}
@@ -83,6 +84,51 @@ public class Partida {
 		return moValido;
 	}
 	
+	private boolean hayGrupo(){
+		boolean hayGrupo = false;
+		int consecutivos = 0;
+		for(int i = 0; i < FILAS; i++){
+			for(int j = 0; j < COLUMNAS; j++){
+				if((j+1 < COLUMNAS) && tablero.getFicha(i,j) == tablero.getFicha(i,j+1) && tablero.getFicha(i,j) != Ficha.VACIA){ 
+	                consecutivos = 0;
+					while((j+consecutivos < COLUMNAS) && tablero.getFicha(i, j) == tablero.getFicha(i, j+consecutivos)){ 
+	                    consecutivos++; 
+	                } 
+	                if(consecutivos >= 4 && tablero.getFicha(i, j) == tablero.getFicha(i, j+1)){ 
+	                    hayGrupo = true; 
+	                } 
+	            }
+				else if((j+1 < COLUMNAS-3) && (i+1 < FILAS-2) && tablero.getFicha(i, j) == tablero.getFicha(i+1, j+1) && tablero.getFicha(i, j) != Ficha.VACIA){
+					consecutivos = 0;
+					while(consecutivos != 4 && tablero.getFicha(i, j) == tablero.getFicha(i+consecutivos, j+consecutivos)){
+						consecutivos++;
+					}
+	                if(consecutivos >= 4){ 
+	                    hayGrupo = true; 
+	                }
+				}
+				else if((COLUMNAS-1-j > 2) && (i+1 < FILAS-2) && tablero.getFicha(i, COLUMNAS-1-j) == tablero.getFicha(i+1, COLUMNAS-1-j-1) && tablero.getFicha(i, COLUMNAS-1-j) != Ficha.VACIA){
+					consecutivos = 0;
+					while(consecutivos != 4 && tablero.getFicha(i, COLUMNAS-1-j) == tablero.getFicha(i+consecutivos, COLUMNAS-1-j-consecutivos)){
+						consecutivos++;
+					}
+	                if(consecutivos >= 4){ 
+	                    hayGrupo = true; 
+	                }
+				}
+	            else if((i+1 < FILAS) && tablero.getFicha(i, j) == tablero.getFicha(i+1, j) && tablero.getFicha(i, j) != Ficha.VACIA){ 
+	                consecutivos = 0; 
+	                while((i+consecutivos < FILAS) && tablero.getFicha(i, j) == tablero.getFicha(i+consecutivos, j)){ 
+	                    consecutivos++; 
+	                }  
+	                if(consecutivos >= 4 && tablero.getFicha(i, j) == tablero.getFicha(i+1, j)){ 
+	                    hayGrupo = true; 
+	                } 
+	            } 
+			}
+		}
+		return hayGrupo;
+	}
 	
 	public String toString(){
 		String mensaje = this.tablero.toString();
@@ -97,4 +143,5 @@ public class Partida {
 		return mensaje = mensaje + nuevalinea + "Juegan " + ficha;
 	
 	}
+	
 }
