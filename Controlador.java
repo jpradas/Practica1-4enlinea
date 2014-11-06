@@ -1,12 +1,14 @@
-package practica1;
-
+package control;
 import java.util.Scanner;
+import logica.Partida;
+import logica.Ficha;
+
 
 public class Controlador {
 	private Partida partida;
 	private Scanner in;
 	
-	public Controlador(Partida partida, Scanner in){
+	public Controlador (Partida partida, Scanner in){
 		this.partida = partida;
 		this.in = in;
 	}
@@ -14,7 +16,7 @@ public class Controlador {
 	public void run(){
 		this.partida.reset();
 		String opcion = "";
-		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.terminada()){
+		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.partidaTerminada()){
 			System.out.println(this.partida.toString());
 			System.out.println("Que quieres hacer? ");
 			opcion = this.in.next();
@@ -25,8 +27,8 @@ public class Controlador {
 					System.out.println("Movimiento incorrecto");
 				}
 				else{
-					if(this.partida.terminada()){
-						Ficha ganador = this.partida.getFichaGanador();
+					if(this.partida.partidaTerminada()){
+						Ficha ganador = this.partida.getGanador();
 						if(ganador == Ficha.VACIA){
 							System.out.println("Partida en tablas");
 							opcion = "salir";
@@ -39,7 +41,7 @@ public class Controlador {
 				}
 			}
 			else if(opcion.equalsIgnoreCase("DESHACER")){
-				if(!this.partida.desHacer()){
+				if(!this.partida.undo()){
 					System.out.println("Imposible Deshacer");
 				}
 			}
@@ -48,5 +50,5 @@ public class Controlador {
 			}
 		}
 	}
-	
 }
+
