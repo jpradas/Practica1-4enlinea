@@ -14,7 +14,7 @@ public class Controlador {
 	}
 	
 	public void run(){
-		this.partida.reset();
+		//this.partida.reset();
 		String opcion = "";
 		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.partidaTerminada()){
 			System.out.println(this.partida.toString());
@@ -51,4 +51,3 @@ public class Controlador {
 		}
 	}
 }
-
