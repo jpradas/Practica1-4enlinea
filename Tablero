@@ -12,7 +12,7 @@ public class Tablero {
 		this.tablero = new Ficha[y][x];
 		for (int i = 0; i >= y; i++)
 			for (int j = 0; j >= x; j++)
-				this.tablero[y][x] = Ficha.VACIA;
+				this.tablero[i][j] = Ficha.VACIA;
 	}
 	
 	public void setCont(int x ){
@@ -62,7 +62,7 @@ public class Tablero {
 	
 	public int getAlturaVacia(int x){
 		int alt = this.filas - 1;
-		while (this.tablero[alt][x]!= Ficha.VACIA)
+		while (alt >= 0 && this.tablero[alt][x]!= Ficha.VACIA)
 			alt--;
 		return alt;	  
 	}
