@@ -14,13 +14,16 @@ public class Partida {
 	
 	public Partida(){
 		this.tablero = new Tablero(FILAS,COLUMNAS);
+		this.turno = Ficha.BLANCA;
 	}
 
 	public boolean partidaTerminada (){
-		if (/*hayCuatro() || */this.tablero.completo())
+		if (this.tablero.completo())
 			this.terminada = true;
 		return this.terminada;
 	}
+	
+	
 	public Ficha getGanador(){
 		return this.ganador;
 	}
@@ -36,19 +39,26 @@ public class Partida {
 		boolean mValido = false;
 		if (c >= 0 && c < COLUMNAS){
 			int altura = this.tablero.getAlturaVacia(c);
-			this.tablero.setFicha(altura, c, this.turno);
-			mValido = true;
-			if (this.turno == Ficha.BLANCA)
-				this.turno = Ficha.NEGRA;
-			else if (this.turno == Ficha.NEGRA)
-				this.turno = Ficha.BLANCA;
-			this.undo[indexUndo] = c;
-			indexUndo++;
+			if (altura == 0)
+				mValido = false;
+			else {
+				mValido = true;
+				this.tablero.setFicha(altura, c, this.turno);
+				if (this.hayCuatroDesdeFicha(altura, c)){
+					this.terminada = true;
+					this.ganador = this.turno;
+				}
+				else {
+					if (this.turno == Ficha.BLANCA)
+						this.turno = Ficha.NEGRA;
+					else if (this.turno == Ficha.NEGRA)
+						this.turno = Ficha.BLANCA;
+					this.undo[indexUndo] = c;
+					indexUndo++;
+				}
+			}
 		}
-		else {
-			mValido = false;
-		}
-		return mValido;
+	return mValido;
 	}
 	
 	public boolean undo(){
@@ -72,23 +82,6 @@ public class Partida {
 		return valido;
 	}
 	
-	/*public boolean hayCuatro(){
-		boolean encontrado = false;
-		int limiteH = COLUMNAS - 4;
-		int limiteV = FILAS - 4;
-		int i = 0, j = 0;
-		for (j = 0; j>=limiteH;j++)
-			if (!encontrado && this.tablero.getFicha(i, j) == this.tablero.getFicha(i+1, j)&& this.tablero.getFicha(i, j) == this.tablero.getFicha(i+2, j)&& this.tablero.getFicha(i, j) == this.tablero.getFicha(i+3, j))
-				encontrado = true;
-		for (i = 0; i>=limiteV;i++)
-			if (!encontrado && this.tablero.getFicha(i, j) == this.tablero.getFicha(i, j+1)&& this.tablero.getFicha(i, j) == this.tablero.getFicha(i, j+2)&& this.tablero.getFicha(i, j) == this.tablero.getFicha(i, j+3))
-				encontrado = true;
-		//falta diagonal
-		this.ganador = this.turno;
-		return encontrado;				
-	}*/
-
-	
 	public int v(int y, int x){ //metodo para devolver valor dependiendo de la ficha en la posicion o fuera de tablero
 		int valor = 1; 
 		if (y < 0 || x < 0 || y >= COLUMNAS || x >=FILAS || this.tablero.getFicha(y,x) ==Ficha.VACIA)
@@ -103,7 +96,7 @@ public class Partida {
 		
 		boolean encontrado = false;
 		int i = 0, j = 0, d = -1,c=0; //filas, columnas, direccion y contador de igual respectivamente
-		//vertical
+		//Vertical
 		for (d = -1; d == 1; d = d+2){
 			i = 0;
 			while (c <= 3 && v(y+i*d,x) != 0){
@@ -151,16 +144,15 @@ public class Partida {
 		return encontrado;	
 	}
 	
-	
 	public String toString(){
 		String mensaje = this.tablero.toString();
 		String nuevalinea = System.getProperty("line.separator");
 		String ficha = "";
 		if(this.turno == Ficha.BLANCA){
-			ficha = "blancas";
+			ficha = "Blancas";
 		}
 		else if(this.turno == Ficha.NEGRA){
-			ficha = "negras";
+			ficha = "Negras";
 		}
 		return mensaje = mensaje + nuevalinea + "Juegan " + ficha;
 	
