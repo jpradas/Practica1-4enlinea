@@ -7,16 +7,16 @@ public class Tablero {
 	private int contCompleto = 0;
 	
 	public Tablero (int y, int x){
-		this.filas = x; 
-		this.columnas = y;
+		this.filas = y; 
+		this.columnas = x;
 		this.tablero = new Ficha[y][x];
-		for (int i = 0; i >= y; i++)
-			for (int j = 0; j >= x; j++)
+		for (int i = 0; i < y; i++)
+			for (int j = 0; j < x; j++)
 				this.tablero[i][j] = Ficha.VACIA;
 	}
 	
-	public void setCont(int x ){
-		this.contCompleto = x;
+	public void setCont(int cont){
+		this.contCompleto = cont;
 	}
 	public int getCont (){
 		return this.contCompleto;
@@ -24,7 +24,7 @@ public class Tablero {
 	
 	public void setFicha(int y, int x,Ficha ficha){
 		this.tablero[y][x] = ficha;
-		this.contCompleto++; //hacer algo parecido en la pila y el undo
+		this.contCompleto++;
 	}
 	
 	public Ficha getFicha(int y, int x){
@@ -60,9 +60,9 @@ public class Tablero {
 		return mensaje;
 	}
 	
-	public int getAlturaVacia(int x){
+	public int getAlturaVacia(int col){
 		int alt = this.filas - 1;
-		while (alt >= 0 && this.tablero[alt][x]!= Ficha.VACIA)
+		while (alt >= 0 && this.tablero[alt][col]!= Ficha.VACIA)
 			alt--;
 		return alt;	  
 	}
