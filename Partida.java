@@ -6,8 +6,8 @@ public class Partida {
 	public boolean terminada = false;
 	public static final int MAX_UNDO = 10;
 	private Ficha ganador = Ficha.VACIA;
-	private int[] undo;
-	private int indexUndo;
+	private int[] undo = new int[Partida.FILAS*Partida.COLUMNAS];
+	private int indexUndo = 0;
 	private final static int FILAS = 6;
 	private final static int COLUMNAS = 7;
 	
@@ -18,7 +18,7 @@ public class Partida {
 	}
 
 	public boolean partidaTerminada (){
-		if (this.tablero.completo())
+		if (this.tablero.completo()) 
 			this.terminada = true;
 		return this.terminada;
 	}
@@ -39,7 +39,7 @@ public class Partida {
 		boolean mValido = false;
 		if (c >= 0 && c < COLUMNAS){
 			int altura = this.tablero.getAlturaVacia(c);
-			if (altura == 0)
+			if (altura < 0)
 				mValido = false;
 			else {
 				mValido = true;
@@ -84,7 +84,7 @@ public class Partida {
 	
 	public int v(int y, int x){ //metodo para devolver valor dependiendo de la ficha en la posicion o fuera de tablero
 		int valor = 1; 
-		if (y < 0 || x < 0 || y >= COLUMNAS || x >=FILAS || this.tablero.getFicha(y,x) ==Ficha.VACIA)
+		if (y < 0 || x < 0 || y >= FILAS || x >=COLUMNAS || this.tablero.getFicha(y,x) ==Ficha.VACIA)
 			valor = 0; 
 		else if (this.tablero.getFicha(y, x) == Ficha.NEGRA)
 			valor = 2;
@@ -95,15 +95,13 @@ public class Partida {
 	public boolean hayCuatroDesdeFicha(int y, int x){
 		
 		boolean encontrado = false;
-		int i = 0, j = 0, d = -1,c=0; //filas, columnas, direccion y contador de igual respectivamente
+		int i = 1, j, d,c; //filas, columnas, direccion y contador de igual respectivamente
 		//Vertical
-		for (d = -1; d == 1; d = d+2){
-			i = 0;
-			while (c <= 3 && v(y+i*d,x) != 0){
-				if (v(y,x)==v(y+i*d,x)){
-					c++;				
-				}
-				else {}
+		c = 0;
+		for (d = -1; d <= 1; d+=2){
+			i = 1;
+			while (c <= 3 && v(y+i*d,x) != 0 && v(y,x)==v(y+i*d,x)){
+				c++;				
 				i++;
 			}
 		}
@@ -112,13 +110,10 @@ public class Partida {
 		else  if (!encontrado) {		
 		//Horizontal
 			c = 0;
-			for (d = -1; d == 1; d = d+2){
-				j = 0;
-				while (c <= 3 && v(y,x+j*d) != 0){
-					if (v(y,x)==v(y,x+j*d)){
-						c++;
-					}
-					else{}
+			for (d = -1; d <= 1; d+=2){
+				j = 1;
+				while (c <= 3 && v(y,x+j*d) != 0 && v(y,x) == v(y,x+j*d)){
+					c++;
 					j++;
 				}
 			}
@@ -127,19 +122,20 @@ public class Partida {
 			encontrado = true;
 		else if (!encontrado){
 		//diagonal
-			int dir = -1;
-			for (dir = -1; dir == 1; dir = dir + 2)
+			for (int dir = -1; dir <= 1; dir+=2){
 				c = 0;
-				for (d = -1; d == 1; d = d+2){
-					j = 0;
-					while (c<=3 && v(y+i*dir,x+j*d) !=0 ){
-						if (v(y,x) == v(y+i*dir,x+j*d))
-							c++;
-						else{}
+				for (d = -1; d <= 1; d +=2){
+					j = 1;
+					i = 1;
+					while (c<=3 && v(y+i*dir,x+j*d) !=0 && v(y,x) == v(y+i*dir,x+j*d)){
+						c++;
 						j++;
 						i++;
 					}
-				}		
+				}
+			}
+			if (c>=3)
+				encontrado = true;
 			}
 		return encontrado;	
 	}
