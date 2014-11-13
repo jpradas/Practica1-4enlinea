@@ -8,13 +8,22 @@ public class Controlador {
 	private Partida partida;
 	private Scanner in;
 	
+	/** Constructora para el objeto Controlador que lleva el control de la partida.
+	 * @param partida instancia de partida creada.
+	 * @param in parametro de tipo Scanner 
+	 */
 	public Controlador (Partida partida, Scanner in){
 		this.partida = partida;
 		this.in = in;
 	}
 	
+	/**metodo que lleva el control de la partida, asi como los menus 
+	 * para elegir opciones: 
+	 * -Poner: coloca una ficha en la columna deseada
+	 * -Deshacer: Deshace el ultimo movimiento mientras sea posible
+	 * -Salir: Sale de la partida.
+	 */
 	public void run(){
-		//this.partida.reset();
 		String opcion = "";
 		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.partidaTerminada()){
 			System.out.println(this.partida.toString());
@@ -34,7 +43,7 @@ public class Controlador {
 							opcion = "salir";
 						}
 						else{
-							System.out.println("Ganan las " + ganador);
+							System.out.println("Ganan la " + ganador);
 							opcion = "salir";
 						}
 					}
