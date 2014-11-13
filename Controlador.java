@@ -8,11 +8,19 @@ public class Controlador {
 	private Partida partida;
 	private Scanner in;
 	
+	/**
+	 * La constructora Controlador asigna a sus atributos la partida creada por Main y el lector Scanner.
+	 * @param partida Es la partida creada por el Main la cual se pasa a controlador para que la ejecute
+	 * @param in Es el parametro el cual recibe lo escrito por teclado.
+	 */
 	public Controlador(Partida partida, Scanner in){
 		this.partida = partida;
 		this.in = in;
 	}
 	
+	/**
+	 * El metodo run es el encargado de ejecutar la partida y ser de arbitro entre el usuario y la CPU, es el motor del juego.
+	 */
 	public void run(){
 		this.partida.reset();
 		String opcion = "";
@@ -34,7 +42,7 @@ public class Controlador {
 							opcion = "salir";
 						}
 						else{
-							System.out.println("Ganan las " + ganador);
+							System.out.println("Gana la " + ganador);
 							opcion = "salir";
 						}
 					}
