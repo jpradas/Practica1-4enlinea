@@ -55,10 +55,19 @@ public class Partida {
 						this.turno = Ficha.BLANCA;
 					this.undo[indexUndo] = c;
 					indexUndo++;
+					if (indexUndo >= MAX_UNDO){
+						desplazarUndoIzq();
+						indexUndo--;
+					}
 				}
 			}
 		}
 	return mValido;
+	}
+	
+	public void desplazarUndoIzq(){
+		for (int i = 0;i >=indexUndo;i++)
+			this.undo[i] = this.undo[i+1];	
 	}
 	
 	public boolean undo(){
@@ -87,7 +96,7 @@ public class Partida {
 		if (y < 0 || x < 0 || y >= FILAS || x >=COLUMNAS || this.tablero.getFicha(y,x) ==Ficha.VACIA)
 			valor = 0; 
 		else if (this.tablero.getFicha(y, x) == Ficha.NEGRA)
-			valor = 2;
+			valor = 2; 
 		else{}
 		return valor;
 	}
@@ -95,46 +104,43 @@ public class Partida {
 	public boolean hayCuatroDesdeFicha(int y, int x){
 		
 		boolean encontrado = false;
-		int i = 1, j, d,c; //filas, columnas, direccion y contador de igual respectivamente
+		int i = 1, j, d,iguales; //filas, columnas, direccion y contador de igual respectivamente
 		//Vertical
-		c = 0;
-		for (d = -1; d <= 1; d+=2){
-			i = 1;
-			while (c <= 3 && v(y+i*d,x) != 0 && v(y,x)==v(y+i*d,x)){
-				c++;				
+		iguales = 0;
+			while (iguales <= 3 && v(y+i,x) != 0 && v(y,x)==v(y+i,x)){
+				iguales++;				
 				i++;
 			}
-		}
-		if (c >= 3)
+		if (iguales >= 3)
 			encontrado = true;		
 		else  if (!encontrado) {		
 		//Horizontal
-			c = 0;
+			iguales = 0;
 			for (d = -1; d <= 1; d+=2){
 				j = 1;
-				while (c <= 3 && v(y,x+j*d) != 0 && v(y,x) == v(y,x+j*d)){
-					c++;
+				while (iguales <= 3 && v(y,x+j*d) != 0 && v(y,x) == v(y,x+j*d)){
+					iguales++;
 					j++;
 				}
 			}
 		}
-		if (c>=3)
+		if (iguales>=3)
 			encontrado = true;
 		else if (!encontrado){
 		//diagonal
 			for (int dir = -1; dir <= 1; dir+=2){
-				c = 0;
+				iguales = 0;
 				for (d = -1; d <= 1; d +=2){
 					j = 1;
 					i = 1;
-					while (c<=3 && v(y+i*dir,x+j*d) !=0 && v(y,x) == v(y+i*dir,x+j*d)){
-						c++;
+					while (iguales<=3 && v(y+i*dir,x+j*d) !=0 && v(y,x) == v(y+i*dir,x+j*d)){
+						iguales++;
 						j++;
 						i++;
 					}
 				}
 			}
-			if (c>=3)
+			if (iguales>=3)
 				encontrado = true;
 			}
 		return encontrado;	
