@@ -1,6 +1,7 @@
 package logica;
 
 public class Tablero {
+	
 	private int filas;
 	private int columnas;
 	private Ficha[][] tablero;
