@@ -2,21 +2,14 @@ package logica;
 
 
 public class Tablero {
-	
-	/**
-	 * @param tablero El atributo tablero crea una matriz tablero de fichas, por lo cual cada posición de la matriz tendrá un valor del enumerado Ficha.
-	 * @param alto	El atributo alto nos indica el número de filas que tiene el tablero.
-	 * @param ancho	El atributo ancho nos indica el número de columnas que tiene el tablero.
-	 */
-	
 	private Ficha [][] tablero;
 	private int ancho;  // COLUMNAS
 	private int alto;   // FILAS
 	
 	/**
-	 * La constructora Tablero crea el tablero con enumerados del tipo Ficha e inicializa los atributos privados alto y ancho al valor de la matriz creada.
-	 * @param alto	El parámetro alto indica la altura que tendrá el tablero.
-	 * @param ancho	El parámetro ancho indica la anchura que tendrá el tablero.
+	 * La constructora Tablero implementa el tablero del juego con enumerados del tipo Ficha e inicializa los atributos privados alto y ancho al valor de la matriz creada.
+	 * @param alto	El parametro alto indica la altura que tendra el tablero.
+	 * @param ancho	El parametro ancho indica la anchura que tendra el tablero.
 	 */
 	
 	public Tablero(int alto, int ancho){
@@ -26,7 +19,7 @@ public class Tablero {
 	}
 	
 	/**
-	 * El método reset reinicia el tablero a su valor inicial, es decir, todas las casillas marcan la ficha VACIA.
+	 * El metodo reset reinicia el tablero a su valor inicial, es decir, todas las casillas marcan la ficha VACIA.
 	 */
 
 	public void reset(){
@@ -38,9 +31,9 @@ public class Tablero {
 	}
 	
 	/**
-	 * El método getFicha devuelve una ficha del tablero en una posición indicada previamente por altura y columna.
-	 * @param altura El parámetro altura le indica al método la fila en la que ha de recoger la ficha.
-	 * @param columna El parámetro columna le indica al método la columna en la que ha de recoger la ficha
+	 * El metodo getFicha devuelve una ficha del tablero en una posicion indicada previamente por altura y columna.
+	 * @param altura El parametro altura le indica al metodo la fila en la que ha de recoger la ficha.
+	 * @param columna El parámetro columna le indica al metodo la columna en la que ha de recoger la ficha
 	 * @return	retorna una ficha
 	 */
 	
@@ -49,7 +42,7 @@ public class Tablero {
 	}
 	
 	/**
-	 * El método devolver altura devuelve la ultima altura ocupada en la matriz, en caso de ser 0 la columna quiere decir que esta al completo.
+	 * El metodo devolver altura devuelve la ultima altura ocupada en la matriz, en caso de ser 0 la columna quiere decir que esta al completo.
 	 * @param col	Indica la columna a mirar para revisar su altura.
 	 * @return	retorna la ultima altura desocupada (en caso de haberla) y si no devuelve un 0.
 	 */
@@ -69,7 +62,7 @@ public class Tablero {
 	}
 	
 	/**
-	 * El método setFicha coloca una ficha en una determinada posición del tablero.
+	 * El metodo setFicha coloca una ficha en una determinada posicion del tablero.
 	 * @param ficha	Es la ficha que ha de colocar en el tablero.
 	 * @param col	Columna en la cual ha de colocar la ficha.
 	 * @param altura	Altura a la cual ha de colocar la ficha.
@@ -80,7 +73,7 @@ public class Tablero {
 	}
 	
 	/**
-	 * El método toString devuelve la informacion de la clase tablero en forma de String.
+	 * El metodo toString devuelve la informacion de la clase tablero en forma de String.
 	 */
 	
 	public String toString(){
