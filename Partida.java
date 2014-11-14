@@ -6,17 +6,23 @@ public class Partida {
 	public boolean terminada = false;
 	public static final int MAX_UNDO = 10;
 	private Ficha ganador = Ficha.VACIA;
-	private int[] undo = new int[Partida.FILAS*Partida.COLUMNAS];
+	private int[] undo = new int[MAX_UNDO+1];//se Usa el max_undo+1 para poder usar la funcion desplazar izquierda
 	private int indexUndo = 0;
 	private final static int FILAS = 6;
 	private final static int COLUMNAS = 7;
 	
+	/**
+	 * La constructora Partida crea un tablero con un numero determinado de filas y columnas. 
+	 */
 	
 	public Partida(){
 		this.tablero = new Tablero(FILAS,COLUMNAS);
 		this.turno = Ficha.BLANCA;
 	}
 
+	/**si el tablero esta lleno o la partida esta terminada con ganador devuelve Verdadero
+	 * @return el valor de terminada 
+	 */
 	public boolean partidaTerminada (){
 		if (this.tablero.completo()) 
 			this.terminada = true;
@@ -24,17 +30,30 @@ public class Partida {
 	}
 	
 	
+	/** devuelve el valor de la ficha ganadora
+	 * @return ganador 
+	 */
 	public Ficha getGanador(){
 		return this.ganador;
 	}
 	
+	/**Reinicia la partida poniendo el tablero todas a VACIA, e inicializando el turno, contCompleto e indexUndo
+	 * 
+	 * 
+	 */
 	public void reset(){
 		for (int i=0; i<FILAS;i++)
 			for (int j = 0;j<COLUMNAS;j++)
 				this.tablero.setFicha(i, j, Ficha.VACIA);
 		this.turno = Ficha.BLANCA;
+		this.tablero.setCont(0);
+		this.indexUndo = 0;
 	}
 	
+	/** Ejecuta el moviento en la columna introducida y actualiza los valores de la memoria para undos 
+	 * @param c columna en la cual se realiza el movimiento
+	 * @return Verdadero si se ha realizado el movimiento
+	 */
 	public boolean ejecutaMovimiento(int c){
 		boolean mValido = false;
 		if (c >= 0 && c < COLUMNAS){
@@ -55,7 +74,7 @@ public class Partida {
 						this.turno = Ficha.BLANCA;
 					this.undo[indexUndo] = c;
 					indexUndo++;
-					if (indexUndo >= MAX_UNDO){
+					if (indexUndo > MAX_UNDO){
 						desplazarUndoIzq();
 						indexUndo--;
 					}
@@ -65,11 +84,17 @@ public class Partida {
 	return mValido;
 	}
 	
+	/**Desplaza a la izquierda todos los movimientos guardados en la memoria undo 
+	 * 
+	 */
 	public void desplazarUndoIzq(){
-		for (int i = 0;i >=indexUndo;i++)
+		for (int i = 0;i<indexUndo-1;i++)
 			this.undo[i] = this.undo[i+1];	
 	}
 	
+	/** deshace un moviento realizado cambiando la memoria undo
+	 * @return Verdadero si se ha deshacido el moviento
+	 */
 	public boolean undo(){
 		boolean valido = false;
 		if(this.indexUndo <= 0){
@@ -91,7 +116,12 @@ public class Partida {
 		return valido;
 	}
 	
-	public int v(int y, int x){ //metodo para devolver valor dependiendo de la ficha en la posicion o fuera de tablero
+	/** Metodo para devolver un valor dependiendo de la ficha y su posicion
+	 * @param y posicion de la ficha en el eje y
+	 * @param x posicion de la ficha en el eje x 
+	 * @return regresa el valor de la ficha en determinada posicion, 0 si es Vacia o se sale de los limites, 2 si es negra y 1 si es blanca
+	 */
+	public int v(int y, int x){ 
 		int valor = 1; 
 		if (y < 0 || x < 0 || y >= FILAS || x >=COLUMNAS || this.tablero.getFicha(y,x) ==Ficha.VACIA)
 			valor = 0; 
@@ -101,6 +131,11 @@ public class Partida {
 		return valor;
 	}
 	
+	/**Comprueba si desde determinada posicion hay fichas iguales en Vertical, Horizontal y Diagonal
+	 * @param y posicion de la ficha en el eje y
+	 * @param x x posicion de la ficha en el eje x 
+	 * @return Verdadero si hay un grupo de fichas iguales igual o mayor que 4
+	 */
 	public boolean hayCuatroDesdeFicha(int y, int x){
 		
 		boolean encontrado = false;
@@ -145,7 +180,9 @@ public class Partida {
 			}
 		return encontrado;	
 	}
-	
+	/**
+	 * El metodo toString devuelve la informacion de la clase partida en forma de String.
+	 */
 	public String toString(){
 		String mensaje = this.tablero.toString();
 		String nuevalinea = System.getProperty("line.separator");
