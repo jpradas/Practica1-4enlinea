@@ -1,5 +1,9 @@
 package logica;
 
+/**Clase que almacena el estado de un tablero 
+ * 
+ *
+ */
 public class Tablero {
 	
 	private int filas;
@@ -16,24 +20,14 @@ public class Tablero {
 	public Tablero (int y, int x){
 		this.filas = y; 
 		this.columnas = x;
+		this.contCompleto=0;
 		this.tablero = new Ficha[y][x];
 		for (int i = 0; i < y; i++)
 			for (int j = 0; j < x; j++)
 				this.tablero[i][j] = Ficha.VACIA;
 	}
 	
-	/** Colocar contador, cambia el valor de contador completo
-	 * @param cont numero de fichas puestas
-	 */
-	public void setCont(int cont){
-		this.contCompleto = cont;
-	}
-	/** Obtiene el valor de contCompleto
-	 * @return regresa el contCompleto que es el numero de fichas jugadas
-	 */
-	public int getCont (){
-		return this.contCompleto;
-	}
+
 	
 	/** Coloca la ficha en la posicion (y,x)
 	 * @param y posicion de la ficha en el eje y 
@@ -42,7 +36,7 @@ public class Tablero {
 	 */
 	public void setFicha(int y, int x,Ficha ficha){
 		this.tablero[y][x] = ficha;
-		this.contCompleto++;
+		if (ficha!=Ficha.VACIA) this.contCompleto++;
 	}
 	
 	/** Devuelve la ficha en la posicion (y,x)
@@ -89,14 +83,11 @@ public class Tablero {
 		return mensaje;
 	}
 	
-	/** Devuelve la altura a la cual se encuentra la primera ficha vacia de determinada columna
-	 * @param col colunma en la cual se quiere encontrar la altura vacia
-	 * @return altura vacia en dicha columna 
-	 */
-	public int getAlturaVacia(int col){
-		int alt = this.filas - 1;
-		while (alt >= 0 && this.tablero[alt][col]!= Ficha.VACIA)
-			alt--;
-		return alt;	  
+	
+	public void reset() {
+		this.contCompleto=0;
+		for (int i=0; i<this.filas;i++)
+			for (int j = 0;j<this.columnas;j++)
+				this.setFicha(i, j, Ficha.VACIA);
 	}
 }
