@@ -4,6 +4,9 @@ import logica.Partida;
 import logica.Ficha;
 
 
+/**Clase que controla la ejecucion de la aplicacion
+ *
+ */
 public class Controlador {
 	private Partida partida;
 	private Scanner in;
@@ -17,7 +20,7 @@ public class Controlador {
 		this.in = in;
 	}
 	
-	/**metodo que lleva el control de la partida, asi como los menus 
+	/**Metodo que lleva el control de la partida, asi como los menus 
 	 * para elegir opciones: 
 	 * -Poner: coloca una ficha en la columna deseada
 	 * -Deshacer: Deshace el ultimo movimiento mientras sea posible
@@ -43,7 +46,7 @@ public class Controlador {
 							opcion = "salir";
 						}
 						else{
-							System.out.println("Ganan la " + ganador);
+							System.out.println("Gana la " + ganador);
 							opcion = "salir";
 						}
 					}
