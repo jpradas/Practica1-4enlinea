@@ -1,5 +1,9 @@
 package logica;
 
+/**Clase que representa el estado de una partida
+ * 
+ *
+ */
 public class Partida {
 	private Ficha turno;
 	private Tablero tablero;
@@ -8,8 +12,9 @@ public class Partida {
 	private Ficha ganador = Ficha.VACIA;
 	private int[] undo = new int[MAX_UNDO+1];//se Usa el max_undo+1 para poder usar la funcion desplazar izquierda
 	private int indexUndo = 0;
-	private final static int FILAS = 6;
-	private final static int COLUMNAS = 7;
+	public final static int FILAS = 4;
+	public final static int COLUMNAS = 3;
+	public final static int GANAN=3;
 	
 	/**
 	 * La constructora Partida crea un tablero con un numero determinado de filas y columnas. 
@@ -42,11 +47,8 @@ public class Partida {
 	 * 
 	 */
 	public void reset(){
-		for (int i=0; i<FILAS;i++)
-			for (int j = 0;j<COLUMNAS;j++)
-				this.tablero.setFicha(i, j, Ficha.VACIA);
+		this.tablero.reset();
 		this.turno = Ficha.BLANCA;
-		this.tablero.setCont(0);
 		this.indexUndo = 0;
 	}
 	
@@ -57,7 +59,7 @@ public class Partida {
 	public boolean ejecutaMovimiento(int c){
 		boolean mValido = false;
 		if (c >= 0 && c < COLUMNAS){
-			int altura = this.tablero.getAlturaVacia(c);
+			int altura = this.getAlturaVacia(c);
 			if (altura < 0)
 				mValido = false;
 			else {
@@ -101,11 +103,11 @@ public class Partida {
 			valido = false;
 		}
 		else{
-			int altura = this.tablero.getAlturaVacia(this.undo[this.indexUndo - 1]) + 1;
+			int altura = this.getAlturaVacia(this.undo[this.indexUndo - 1]) + 1;
 			this.tablero.setFicha(altura,this.undo[this.indexUndo - 1] ,Ficha.VACIA);
 			this.indexUndo = this.indexUndo - 1;
 			valido = true;
-			this.tablero.setCont(this.tablero.getCont()-1);
+			//this.tablero.setCont(this.tablero.getCont()-1);
 		}
 		if(this.turno == Ficha.BLANCA){
 			this.turno = Ficha.NEGRA;
@@ -142,24 +144,24 @@ public class Partida {
 		int i = 1, j, d,iguales; //filas, columnas, direccion y contador de igual respectivamente
 		//Vertical
 		iguales = 0;
-			while (iguales <= 3 && v(y+i,x) != 0 && v(y,x)==v(y+i,x)){
+			while (iguales <= Partida.GANAN-1 && v(y+i,x) != 0 && v(y,x)==v(y+i,x)){
 				iguales++;				
 				i++;
 			}
-		if (iguales >= 3)
+		if (iguales >= Partida.GANAN-1)
 			encontrado = true;		
 		else  if (!encontrado) {		
 		//Horizontal
 			iguales = 0;
 			for (d = -1; d <= 1; d+=2){
 				j = 1;
-				while (iguales <= 3 && v(y,x+j*d) != 0 && v(y,x) == v(y,x+j*d)){
+				while (iguales <= Partida.GANAN-1 && v(y,x+j*d) != 0 && v(y,x) == v(y,x+j*d)){
 					iguales++;
 					j++;
 				}
 			}
 		}
-		if (iguales>=3)
+		if (iguales>=Partida.GANAN-1)
 			encontrado = true;
 		else if (!encontrado){
 		//diagonal
@@ -168,14 +170,14 @@ public class Partida {
 				for (d = -1; d <= 1; d +=2){
 					j = 1;
 					i = 1;
-					while (iguales<=3 && v(y+i*dir,x+j*d) !=0 && v(y,x) == v(y+i*dir,x+j*d)){
+					while (iguales<=Partida.GANAN-1 && v(y+i*dir,x+j*d) !=0 && v(y,x) == v(y+i*dir,x+j*d)){
 						iguales++;
 						j++;
 						i++;
 					}
 				}
 			}
-			if (iguales>=3)
+			if (iguales>=Partida.GANAN-1)
 				encontrado = true;
 			}
 		return encontrado;	
@@ -196,4 +198,16 @@ public class Partida {
 		return mensaje = mensaje + nuevalinea + "Juegan " + ficha;
 	
 	}
+	
+	/** Devuelve la altura a la cual se encuentra la primera ficha vacia de determinada columna
+	 * @param col colunma en la cual se quiere encontrar la altura vacia
+	 * @return altura vacia en dicha columna 
+	 */
+	private int getAlturaVacia(int col){
+		int alt = Partida.FILAS - 1;
+		while (alt >= 0 && this.tablero.getFicha(alt,col)!= Ficha.VACIA)
+			alt--;
+		return alt;	  
+	}
+
 }
