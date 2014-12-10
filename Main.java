@@ -1,13 +1,18 @@
-package practica1;
+package main;
+import java.util.Scanner;
+
+import logica.Partida;
+import logica.ReglasJuegoConecta4;
+import control.Controlador;
+import control.TipoJuego;
 
 public class Main {
-	private static java.util.Scanner in = new java.util.Scanner(System.in);
-	private static Partida partida = new Partida();
-	
+	private static Scanner in = new Scanner(System.in);
+
 	public static void main(String[] args) {
-		Controlador c = new Controlador(partida,in);
+		Partida partida = new Partida(new ReglasJuegoConecta4());
+		Controlador c = new Controlador(partida,in, TipoJuego.CONECTA4);
 		c.run();
-		in.close();
 	}
 
 }
