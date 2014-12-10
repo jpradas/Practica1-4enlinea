@@ -1,17 +1,24 @@
-package practica1;
+package logica;
+
 
 public class Partida {
+	private ReglasJuego reglas;
 	private Tablero tablero;
-	private Ficha turno = Ficha.BLANCA;
+	private Ficha turno;
 	private boolean terminada = false;
 	private Ficha ganador = Ficha.VACIA;
 	private int[] undoStack = new int [42];		
 	private int numUndo = 0;
-	private final static int FILAS = 6;
-	private final static int COLUMNAS = 7;
+	private int filas;
+	private int columnas;
+	public final static int GANAN = 4;
 	
-	public Partida(){
-		this.tablero = new Tablero(FILAS, COLUMNAS);
+	public Partida(ReglasJuego reglas){
+		this.reglas = reglas;
+		this.tablero = this.reglas.getTablero();
+		this.filas = this.tablero.alto;
+		this.columnas = this.tablero.ancho;
+		this.turno = Ficha.BLANCA;
 	}
 	
 	public Ficha getFichaGanador(){
@@ -22,8 +29,12 @@ public class Partida {
 		return this.terminada;
 	}
 	
-	public void reset(){
+	public void reset(ReglasJuego reglas){
+		this.reglas = reglas;
+		this.tablero = this.reglas.getTablero();
 		this.tablero.reset();
+		this.filas = this.tablero.alto;
+		this.columnas = this.tablero.ancho;
 		this.turno = Ficha.BLANCA;
 	}
 	
@@ -38,23 +49,33 @@ public class Partida {
 			this.numUndo = this.numUndo - 1;
 			valido = true;
 		}
-		if(this.turno == Ficha.BLANCA){
-			this.turno = Ficha.NEGRA;
+		this.turno = this.reglas.siguienteTurno(this.turno);
+		return valido;
+	}
+	
+	public boolean ejecutaMovimiento(Movimiento mov){
+		boolean valido = true;
+		if(!mov.ejecutaMovimiento(this.tablero)){
+			valido = false;
 		}
-		else if(this.turno == Ficha.NEGRA){
-			this.turno = Ficha.BLANCA;
+		else{
+			if(this.reglas.hayGrupo(mov.getColumna(), mov.getFila())){
+				this.terminada = true;
+				this.ganador = this.turno;
+			}
+			this.turno = this.reglas.siguienteTurno(this.turno);
 		}
 		return valido;
 	}
 	
-	public boolean ejecutaMovimiento(int col){
+	/*public boolean ejecutaMovimiento(int col){
 		boolean moValido = false;
-		if(col < 0 || col >= COLUMNAS){
+		if(col < 0 || col >= this.columnas){
 			moValido = false;
 		}
 		else{
 			int altura = this.tablero.devolverAlturaDesocupada(col);
-			if(altura <= FILAS && altura >= 0){
+			if(altura <= this.filas && altura >= 0){
 				this.tablero.setFicha(this.turno, col, altura);
 				moValido = true;
 				this.undoStack[numUndo] = col;
@@ -63,24 +84,21 @@ public class Partida {
 					this.terminada = true;
 					this.ganador = Ficha.VACIA;
 				}
-				if(this.tablero.cuatroEnLinea(this.turno,col, FILAS - 1) == 1){
+				if(this.reglas.hayGrupo(col, altura)){
 					this.terminada = true;
 					this.ganador = this.turno;
 				}
-				if(this.terminada == false && moValido == true){
-					if(this.turno == Ficha.BLANCA){
-						this.turno = Ficha.NEGRA;
-					}
-					else if(this.turno == Ficha.NEGRA){
-						this.turno = Ficha.BLANCA;
-					}
-				}
+				this.turno = this.reglas.siguienteTurno(this.turno);
 			}
 			else{
 				moValido = false;
 			}
 		}
 		return moValido;
+	}*/
+	
+	public Ficha getJugador(){
+		return this.turno;
 	}
 	
 	public String toString(){
