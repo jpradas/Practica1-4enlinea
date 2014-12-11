@@ -20,4 +20,6 @@ public abstract class ReglasJuego {
 	}
 	
 	abstract public boolean hayGrupo(int x, int y);
+	
+	abstract public Ficha getGanador();
 }
