@@ -55,7 +55,13 @@ public class Controlador {
 					if(!this.partida.ejecutaMovimiento(mov)){
 						System.err.println("Movimiento incorrecto");
 					}
-				}
+					else{
+						if(this.partida.terminada()){
+								System.out.println("Gana la " + this.partida.getFichaGanador());
+								opcion = "salir";
+							}
+						}
+					}
 				/*if(!this.partida.ejecutaMovimiento(col)){
 					System.out.println("Movimiento incorrecto");
 				}
