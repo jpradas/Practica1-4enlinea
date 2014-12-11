@@ -22,7 +22,8 @@ public class MovimientoComplica extends Movimiento{
 					Ficha aux = t.getFicha(this.columna, i);
 					t.setFicha(aux, this.columna, i+1);
 				}
-				t.setFicha(this.turno, this.columna, 0);
+				this.fila = 0;
+				t.setFicha(this.turno, this.columna, this.fila);
 				moValido = true;
 			}
 		}
