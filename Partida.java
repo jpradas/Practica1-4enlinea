@@ -9,15 +9,11 @@ public class Partida {
 	private Ficha ganador = Ficha.VACIA;
 	private int[] undoStack = new int [42];		
 	private int numUndo = 0;
-	private int filas;
-	private int columnas;
 	public final static int GANAN = 4;
 	
 	public Partida(ReglasJuego reglas){
 		this.reglas = reglas;
 		this.tablero = this.reglas.getTablero();
-		this.filas = this.tablero.alto;
-		this.columnas = this.tablero.ancho;
 		this.turno = Ficha.BLANCA;
 	}
 	
@@ -33,8 +29,6 @@ public class Partida {
 		this.reglas = reglas;
 		this.tablero = this.reglas.getTablero();
 		this.tablero.reset();
-		this.filas = this.tablero.alto;
-		this.columnas = this.tablero.ancho;
 		this.turno = Ficha.BLANCA;
 	}
 	
@@ -61,7 +55,7 @@ public class Partida {
 		else{
 			if(this.reglas.hayGrupo(mov.getColumna(), mov.getFila())){
 				this.terminada = true;
-				this.ganador = this.turno;
+				this.ganador = this.reglas.getGanador();
 			}
 			this.turno = this.reglas.siguienteTurno(this.turno);
 		}
