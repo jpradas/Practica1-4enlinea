@@ -4,11 +4,13 @@ public class ReglasJuegoComplica extends ReglasJuego{
 	private Tablero tab;
 	private int columnas;
 	private int filas;
+	private Ficha ganador;
 	
 	public ReglasJuegoComplica(){
 		this.filas = 7;
 		this.columnas = 4;
 		this.iniciaTablero(this.filas, this.columnas);
+		this.ganador = Ficha.VACIA;
 	}
 	
 	public void iniciaTablero(int filas, int columnas){
@@ -24,11 +26,11 @@ public class ReglasJuegoComplica extends ReglasJuego{
 	public boolean hayGrupo(int x, int y){
 		boolean encontrado = false;
 		int suma=0;
-		while(!encontrado && y+suma>0 && y+suma<this.filas){	
+		while(!encontrado && y+suma>=0 && y+suma<this.filas){	
 			int i = 1, j, d,iguales; //filas, columnas, direccion y contador de igual respectivamente
 			//Vertical
 			iguales = 0;
-			while (iguales <= Partida.GANAN-1 && this.v(x,y+i) != 0 && this.v(x,y)==this.v(x,y+i)){
+			while (iguales <= Partida.GANAN-1 && this.v(x,y+suma+i) != 0 && this.v(x,y+suma)==this.v(x,y+i+suma)){
 				iguales++;				
 				i++;
 			}
@@ -39,7 +41,7 @@ public class ReglasJuegoComplica extends ReglasJuego{
 				iguales = 0;
 				for (d = -1; d <= 1; d+=2){
 					j = 1;
-					while (iguales <= Partida.GANAN-1 && this.v(x+j*d,y) != 0 && this.v(x,y) == this.v(x+j*d,y)){
+					while (iguales <= Partida.GANAN-1 && this.v(x+j*d,y+suma) != 0 && this.v(x,y+suma) == this.v(x+j*d,y+suma)){
 						iguales++;
 						j++;
 					}
@@ -54,20 +56,23 @@ public class ReglasJuegoComplica extends ReglasJuego{
 					for (d = -1; d <= 1; d +=2){
 						j = 1;
 						i = 1;
-						while (iguales<=Partida.GANAN-1 && this.v(x+j*d, y+i*dir) !=0 && this.v(x,y) == this.v(x+j*d, y+i*dir)){
+						while (iguales<=Partida.GANAN-1 && this.v(x+j*d, y+i+suma*dir) !=0 && this.v(x,y+suma) == this.v(x+j*d, y+suma+i*dir)){
 							iguales++;
 							j++;
 							i++;
 						}
 					}
 				}
-				if (iguales>=Partida.GANAN-1)
-					encontrado = true;
-				}
+			}
+			if (iguales>=Partida.GANAN-1){
+				encontrado = true;
+				this.ganador = this.tab.getFicha(x, y+suma);
+			}
 			suma++;
 		}
-		return encontrado;
+	return encontrado;
 	}
+
 	
 	/** Metodo para devolver un valor dependiendo de la ficha y su posicion
 	 * @param y posicion de la ficha en el eje y
@@ -82,6 +87,10 @@ public class ReglasJuegoComplica extends ReglasJuego{
 		else if (this.tab.getFicha(y, x) == Ficha.NEGRA)
 			valor = 2; 
 		return valor;
+	}
+
+	public Ficha getGanador(){
+		return this.ganador;
 	}
 
 }
