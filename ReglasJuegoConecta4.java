@@ -4,6 +4,7 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 	private Tablero tablero;
 	private int columnas;
 	private int filas;
+	private Ficha ganador;
 	
 	public ReglasJuegoConecta4(){
 		this.filas = 7;
@@ -59,9 +60,11 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 					}
 				}
 			}
-			if (iguales>=Partida.GANAN-1)
+			if (iguales>=Partida.GANAN-1){
 				encontrado = true;
+				this.ganador = this.tablero.getFicha(y, x);
 			}
+		}
 		return encontrado;	
 	}
 	
@@ -125,4 +128,9 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 		}
 		return hayGrupo;
 	}*/
+
+
+	public Ficha getGanador(){
+		return this.ganador;
+	}
 }
