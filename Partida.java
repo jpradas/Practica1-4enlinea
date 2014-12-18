@@ -7,14 +7,15 @@ public class Partida {
 	private Ficha turno;
 	private boolean terminada = false;
 	private Ficha ganador = Ficha.VACIA;
-	private int[] undoStack = new int [42];		
-	private int numUndo = 0;
+	private Movimiento[] undoStack = new Movimiento[100];		
+	private int numUndo;
 	public final static int GANAN = 4;
 	
 	public Partida(ReglasJuego reglas){
 		this.reglas = reglas;
 		this.tablero = this.reglas.getTablero();
 		this.turno = Ficha.BLANCA;
+		this.numUndo = 0;
 	}
 	
 	public Ficha getFichaGanador(){
@@ -30,20 +31,20 @@ public class Partida {
 		this.tablero = this.reglas.getTablero();
 		this.tablero.reset();
 		this.turno = Ficha.BLANCA;
+		this.numUndo = 0;
 	}
 	
-	public boolean desHacer(){
-		boolean valido = false;
+	public boolean desHacer(){		//falta por hacer que solo sean los 10 últimos movimientos 
+		boolean valido = true;
 		if(this.numUndo <= 0){
 			valido = false;
 		}
 		else{
-			int altura = this.tablero.devolverAlturaDesocupada(this.undoStack[this.numUndo - 1]) + 1;
-			this.tablero.setFicha(Ficha.VACIA, this.undoStack[this.numUndo - 1] , altura);
-			this.numUndo = this.numUndo - 1;
-			valido = true;
+			this.numUndo--;
+			Movimiento mov = this.undoStack[this.numUndo];
+			mov.undo(this.tablero);
+			this.turno = mov.getJugador();
 		}
-		this.turno = this.reglas.siguienteTurno(this.turno);
 		return valido;
 	}
 	
@@ -54,10 +55,14 @@ public class Partida {
 		}
 		else{
 			if(this.reglas.hayGrupo(mov.getColumna(), mov.getFila())){
-				this.terminada = true;
-				this.ganador = this.reglas.getGanador();
+				if(this.reglas.getGanador() != Ficha.VACIA){
+					this.terminada = true;
+					this.ganador = this.reglas.getGanador();
+				}
 			}
 			this.turno = this.reglas.siguienteTurno(this.turno);
+			this.undoStack[this.numUndo]= mov;
+			this.numUndo++;
 		}
 		return valido;
 	}
