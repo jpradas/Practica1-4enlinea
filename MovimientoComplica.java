@@ -31,7 +31,7 @@ public class MovimientoComplica extends Movimiento{
 	}
 
 	public void undo(Tablero t){
-		
+		t.setFicha(Ficha.VACIA, this.columna, this.fila);
 	}
 	
 }
