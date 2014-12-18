@@ -25,6 +25,9 @@ public class Controlador {
 		//this.partida.reset(new ReglasJuegoConecta4());
 		String opcion = "";
 		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.terminada()){
+			/*for(int i = 0; i < 20; i++){
+				System.out.println(System.getProperty("line.separator"));
+			}*/
 			System.out.println(this.partida.toString());
 			System.out.println("Que quieres hacer? ");
 			opcion = null;
