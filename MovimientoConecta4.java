@@ -25,7 +25,7 @@ public class MovimientoConecta4 extends Movimiento{
 	}
 
 	public void undo(Tablero t){
-		
+		t.setFicha(Ficha.VACIA, this.columna, this.fila);
 	}
 
 }
