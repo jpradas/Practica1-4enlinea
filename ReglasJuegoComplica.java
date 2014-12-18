@@ -25,8 +25,8 @@ public class ReglasJuegoComplica extends ReglasJuego{
 	
 	public boolean hayGrupo(int x, int y){
 		boolean encontrado = false;
-		int suma=0;
-		while(!encontrado && y+suma>=0 && y+suma<this.filas){	
+		int suma=0, encontradoB = 0, encontradoN = 0;
+		while(y+suma>=0 && y+suma<this.filas){
 			int i = 1, j, d,iguales; //filas, columnas, direccion y contador de igual respectivamente
 			//Vertical
 			iguales = 0;
@@ -34,10 +34,18 @@ public class ReglasJuegoComplica extends ReglasJuego{
 				iguales++;				
 				i++;
 			}
-			if (iguales >= Partida.GANAN-1)
-				encontrado = true;		
-			else  if (!encontrado) {		
-			//Horizontal
+			if (iguales>=Partida.GANAN-1){
+				encontrado = true;
+				this.ganador = this.tab.getFicha(x, y+suma);
+				if(this.ganador == Ficha.BLANCA){
+					encontradoB++;
+				}
+				else{
+					encontradoN++;
+				}
+			}	
+			/*else  if (!encontrado) {		
+			//Horizontal*/
 				iguales = 0;
 				for (d = -1; d <= 1; d+=2){
 					j = 1;
@@ -46,11 +54,19 @@ public class ReglasJuegoComplica extends ReglasJuego{
 						j++;
 					}
 				}
-			}
-			if (iguales>=Partida.GANAN-1)
+			//}
+			if (iguales>=Partida.GANAN-1){
 				encontrado = true;
-			else if (!encontrado){
-			//diagonal
+				this.ganador = this.tab.getFicha(x, y+suma);
+				if(this.ganador == Ficha.BLANCA){
+					encontradoB++;
+				}
+				else{
+					encontradoN++;
+				}
+			}
+			/*else if (!encontrado){
+			//diagonal*/
 				for (int dir = -1; dir <= 1; dir+=2){
 					iguales = 0;
 					for (d = -1; d <= 1; d +=2){
@@ -63,12 +79,27 @@ public class ReglasJuegoComplica extends ReglasJuego{
 						}
 					}
 				}
-			}
+			//}
 			if (iguales>=Partida.GANAN-1){
 				encontrado = true;
 				this.ganador = this.tab.getFicha(x, y+suma);
+				if(this.ganador == Ficha.BLANCA){
+					encontradoB++;
+				}
+				else{
+					encontradoN++;
+				}
 			}
 			suma++;
+		}
+		if(encontradoB > encontradoN){
+			this.ganador = Ficha.BLANCA;
+		}
+		else if(encontradoB < encontradoN){
+			this.ganador = Ficha.NEGRA;
+		}
+		else if(encontradoB == encontradoN){
+			this.ganador = Ficha.VACIA;
 		}
 	return encontrado;
 	}
