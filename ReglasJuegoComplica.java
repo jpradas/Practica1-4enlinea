@@ -72,24 +72,25 @@ public class ReglasJuegoComplica extends ReglasJuego{
 					for (d = -1; d <= 1; d +=2){
 						j = 1;
 						i = 1;
-						while (iguales<=Partida.GANAN-1 && this.v(x+j*d, y+i+suma*dir) !=0 && this.v(x,y+suma) == this.v(x+j*d, y+suma+i*dir)){
+						while (iguales<=Partida.GANAN-1 && this.v(x+j*d, y+suma+i*dir) !=0 && this.v(x,y+suma) == this.v(x+j*d, y+suma+i*dir)){
 							iguales++;
 							j++;
 							i++;
 						}
 					}
+					if (iguales>=Partida.GANAN-1){
+						encontrado = true;
+						this.ganador = this.tab.getFicha(x, y+suma);
+						if(this.ganador == Ficha.BLANCA){
+							encontradoB++;
+						}
+						else{
+							encontradoN++;
+						}
+					}
 				}
 			//}
-			if (iguales>=Partida.GANAN-1){
-				encontrado = true;
-				this.ganador = this.tab.getFicha(x, y+suma);
-				if(this.ganador == Ficha.BLANCA){
-					encontradoB++;
-				}
-				else{
-					encontradoN++;
-				}
-			}
+
 			suma++;
 		}
 		if(encontradoB > encontradoN){
