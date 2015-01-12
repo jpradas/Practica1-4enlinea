@@ -9,6 +9,7 @@ public class Partida {
 	private Ficha ganador = Ficha.VACIA;
 	private Movimiento[] undoStack = new Movimiento[100];		
 	private int numUndo;
+	private int contadorUndo; 
 	public final static int GANAN = 4;
 	
 	public Partida(ReglasJuego reglas){
@@ -16,6 +17,7 @@ public class Partida {
 		this.tablero = this.reglas.getTablero();
 		this.turno = Ficha.BLANCA;
 		this.numUndo = 0;
+		this.contadorUndo = 10;
 	}
 	
 	public Ficha getFichaGanador(){
@@ -32,15 +34,17 @@ public class Partida {
 		this.tablero.reset();
 		this.turno = Ficha.BLANCA;
 		this.numUndo = 0;
+		this.contadorUndo = 10;
 	}
 	
-	public boolean desHacer(){		//falta por hacer que solo sean los 10 últimos movimientos 
+	public boolean desHacer(){		
 		boolean valido = true;
-		if(this.numUndo <= 0){
+		if(this.numUndo <= 0 || this.contadorUndo <= 0){
 			valido = false;
 		}
 		else{
 			this.numUndo--;
+			this.contadorUndo--;
 			Movimiento mov = this.undoStack[this.numUndo];
 			mov.undo(this.tablero);
 			this.turno = mov.getJugador();
@@ -63,6 +67,9 @@ public class Partida {
 			this.turno = this.reglas.siguienteTurno(this.turno);
 			this.undoStack[this.numUndo]= mov;
 			this.numUndo++;
+			if(this.contadorUndo < 10){
+				this.contadorUndo++;
+			}
 		}
 		return valido;
 	}
