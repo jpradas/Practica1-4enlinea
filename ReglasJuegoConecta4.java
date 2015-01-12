@@ -31,8 +31,10 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 				iguales++;				
 				i++;
 			}
-		if (iguales >= Partida.GANAN-1)
-			encontrado = true;		
+		if (iguales >= Partida.GANAN-1){
+			encontrado = true;	
+			this.ganador = this.tablero.getFicha(x, y);
+		}
 		else  if (!encontrado) {		
 		//Horizontal
 			iguales = 0;
@@ -44,8 +46,10 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 				}
 			}
 		}
-		if (iguales>=Partida.GANAN-1)
+		if (iguales>=Partida.GANAN-1){
 			encontrado = true;
+			this.ganador = this.tablero.getFicha(x, y);
+		}
 		else if (!encontrado){
 		//diagonal
 			for (int dir = -1; dir <= 1; dir+=2){
@@ -62,7 +66,7 @@ public class ReglasJuegoConecta4 extends ReglasJuego{
 			}
 			if (iguales>=Partida.GANAN-1){
 				encontrado = true;
-				this.ganador = this.tablero.getFicha(y, x);
+				this.ganador = this.tablero.getFicha(x, y);
 			}
 		}
 		return encontrado;	
