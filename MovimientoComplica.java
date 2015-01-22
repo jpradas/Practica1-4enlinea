@@ -1,9 +1,16 @@
-package logica;
+package movimientos;
+
+import logica.Ficha;
+import logica.Tablero;
 
 public class MovimientoComplica extends Movimiento{
+	
+	private Ficha fichaDesplazada;
 
 	public MovimientoComplica(int columna, Ficha turno){
+		
 		super(columna, turno);
+		this.fichaDesplazada=Ficha.VACIA;
 	}
 	
 	public boolean ejecutaMovimiento(Tablero t){
@@ -18,6 +25,7 @@ public class MovimientoComplica extends Movimiento{
 				moValido = true;
 			}
 			else if (this.fila == -1){
+				this.fichaDesplazada = t.getFicha(this.columna,t.alto-1);
 				for(int i = t.alto - 2; i >= 0; i--){
 					Ficha aux = t.getFicha(this.columna, i);
 					t.setFicha(aux, this.columna, i+1);
@@ -31,7 +39,16 @@ public class MovimientoComplica extends Movimiento{
 	}
 
 	public void undo(Tablero t){
-		t.setFicha(Ficha.VACIA, this.columna, this.fila);
+		
+		desplazarArriba(t,this.columna);
+		t.setFicha(this.fichaDesplazada, this.columna, t.alto);
+	}
+	
+	private void desplazarArriba(Tablero t,int col){
+		for (int i = 1; i >= t.alto-1;i++){
+			t.setFicha(t.getFicha(i, col), col, i-1);			
+		}
 	}
 	
 }
+
