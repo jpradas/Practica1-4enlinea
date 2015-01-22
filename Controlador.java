@@ -1,64 +1,102 @@
 package control;
-import java.util.Scanner;
-import logica.Partida;
-import logica.Ficha;
 
+import java.util.Scanner;
+
+import logica.Ficha;
+import logica.MovimientoComplica;
+import logica.MovimientoConecta4;
+import logica.Partida;
+import logica.ReglasJuegoComplica;
+import logica.ReglasJuegoConecta4;
+import logica.Movimiento;
 
 /**Clase que controla la ejecucion de la aplicacion
- *
- */
+*
+*/
+
 public class Controlador {
 	private Partida partida;
 	private Scanner in;
+	private TipoJuego jugandoA;
 	
 	/** Constructora para el objeto Controlador que lleva el control de la partida.
 	 * @param partida instancia de partida creada.
 	 * @param in parametro de tipo Scanner 
+	 * @param juego determina el tipo de juego, complica o conecta 4.
 	 */
-	public Controlador (Partida partida, Scanner in){
+	public Controlador(Partida partida, Scanner in, TipoJuego juego){
 		this.partida = partida;
 		this.in = in;
+		this.jugandoA = juego;
 	}
-	
 	/**Metodo que lleva el control de la partida, asi como los menus 
 	 * para elegir opciones: 
+	 * -Jugar "c4" o "co" eliges el modo de juego y reinicia la partida al cambiar
 	 * -Poner: coloca una ficha en la columna deseada
 	 * -Deshacer: Deshace el ultimo movimiento mientras sea posible
 	 * -Salir: Sale de la partida.
 	 */
 	public void run(){
 		String opcion = "";
-		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.partidaTerminada()){
+		while(!opcion.equalsIgnoreCase("SALIR") && !this.partida.terminada()){
 			System.out.println(this.partida.toString());
 			System.out.println("Que quieres hacer? ");
-			opcion = this.in.next();
+			opcion = null;
+			opcion = this.in.nextLine();
 			if(opcion.equalsIgnoreCase("PONER")){
 				System.out.println("-- Introduce la columna: ");
 				int col = this.in.nextInt() - 1;
-				if(!this.partida.ejecutaMovimiento(col)){
-					System.out.println("Movimiento incorrecto");
-				}
-				else{
-					if(this.partida.partidaTerminada()){
-						Ficha ganador = this.partida.getGanador();
-						if(ganador == Ficha.VACIA){
-							System.out.println("Partida en tablas");
-							opcion = "salir";
-						}
-						else{
-							System.out.println("Gana la " + ganador);
-							opcion = "salir";
+				if(this.jugandoA == TipoJuego.CONECTA4){
+					Movimiento mov = new MovimientoConecta4(col, this.partida.getJugador());
+					if(!this.partida.ejecutaMovimiento(mov)){
+						System.err.println("Movimiento incorrecto");
+					}
+					else{
+						if(this.partida.terminada()){
+							if(this.partida.getFichaGanador() == Ficha.VACIA){
+								System.out.println("Partida en tablas");
+								opcion = "salir";
+							}
+							else{
+								System.out.println("Gana la " + this.partida.getFichaGanador());
+								opcion = "salir";
+							}
 						}
 					}
 				}
+				else if(this.jugandoA == TipoJuego.COMPLICA){
+					Movimiento mov = new MovimientoComplica(col, this.partida.getJugador());
+					if(!this.partida.ejecutaMovimiento(mov)){
+						System.err.println("Movimiento incorrecto");
+					}
+					else{
+						if(this.partida.terminada()){
+								System.out.println("Gana la " + this.partida.getFichaGanador());
+								opcion = "salir";
+							}
+						}
+					}
 			}
 			else if(opcion.equalsIgnoreCase("DESHACER")){
-				if(!this.partida.undo()){
+				if(!this.partida.desHacer()){
 					System.out.println("Imposible Deshacer");
 				}
 			}
 			else if(opcion.equalsIgnoreCase("REINICIAR")){
-				this.partida.reset();
+				if(this.jugandoA == TipoJuego.CONECTA4){
+					this.partida.reset(new ReglasJuegoConecta4());
+				}
+				else{
+					this.partida.reset(new ReglasJuegoComplica());
+				}
+			}
+			else if(opcion.equalsIgnoreCase("JUGAR C4")){
+				this.jugandoA = TipoJuego.CONECTA4;
+				this.partida.reset(new ReglasJuegoConecta4());
+			}
+			else if(opcion.equalsIgnoreCase("JUGAR CO")){
+				this.jugandoA = TipoJuego.COMPLICA;
+				this.partida.reset(new ReglasJuegoComplica());
 			}
 		}
 	}
