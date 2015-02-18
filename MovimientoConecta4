@@ -1,0 +1,55 @@
+package movimientos;
+
+import excepciones.ColumnaIncorrecta;
+import excepciones.ColumnaLlena;
+import excepciones.MovimientoInvalido;
+import logica.Ficha;
+import logica.Tablero;
+
+public class MovimientoConecta4 extends Movimiento{
+
+	public MovimientoConecta4(int columna, Ficha turno){
+		super(columna, turno);
+	}
+
+	public void ejecutaMovimiento(Tablero tab) throws MovimientoInvalido{
+		if(!this.columnaCorrecta(tab)){ // no se muy bien que es columnaCorrecta(tab)
+			throw new ColumnaIncorrecta();
+		}
+		else if(!this.columnaLlena(tab)){ //ni columna llena 
+			throw new ColumnaLlena();
+		}
+		else{
+			this.fila = tab.devolverAlturaDesocupada(this.columna);
+			tab.setFicha(this.turno, this.columna, this.fila);
+		}
+		
+	}
+
+	public void undo(Tablero t){
+		t.setFicha(Ficha.VACIA, this.columna, this.fila);
+	}
+	
+	private boolean columnaCorrecta(Tablero tab){
+		boolean correcto = false;
+		if(this.columna > tab.getNumColumnas() || this.columna < 0){
+			return correcto;
+		}
+		else{
+			correcto = true;
+		}
+		return correcto;
+	}
+	
+	private boolean columnaLlena(Tablero tab){
+		boolean correcto = false;
+		if(tab.getFicha(0, this.columna) != Ficha.VACIA){
+			return correcto;
+		}
+		else{
+			correcto = true;
+		}
+		return correcto;
+	}
+
+}
