@@ -1,0 +1,26 @@
+package comandos;
+
+import Excepciones.ErrorDeEjecucion;
+import control.Controlador;
+
+public class Reiniciar implements Comando{
+
+	public void execute(Controlador control) throws ErrorDeEjecucion {
+		control.reiniciar();
+	}
+
+	public Comando parsea(String cadena) {
+		Reiniciar reiniciar = null;
+		String[] pal = cadena.split(" ");
+		if(pal[0].equalsIgnoreCase("REINICIAR")){
+			reiniciar = new Reiniciar();
+		}
+		return reiniciar;
+	}
+
+	@Override
+	public String textoAyuda() {
+		return "REINICIAR: Reinicia la partida";
+	}
+
+}
