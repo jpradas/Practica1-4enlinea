@@ -1,0 +1,58 @@
+package comandos;
+
+import Factorias.FactoriaJuego;
+import Factorias.FactoriaJuegoComplica;
+import Factorias.FactoriaJuegoConecta4;
+import Factorias.FactoriaJuegoGravity;
+import control.Controlador;
+
+public class Jugar implements Comando{
+	private FactoriaJuego factoria;
+	
+	public Jugar(){
+		this.factoria = null;
+	}
+	public Jugar(FactoriaJuego factoria){
+		this.factoria = factoria;
+	}
+	
+	public void execute(Controlador control) {
+		if(this.factoria != null){
+			control.jugar(this.factoria);
+		}
+		else{
+			control.jugar(new FactoriaJuegoConecta4());
+		}
+	}
+
+	public Comando parsea(String cadena) {
+		Jugar juego = null;
+		String[] pal = cadena.split(" ");
+		if(pal.length == 2){
+			if(pal[0].equalsIgnoreCase("JUGAR")){
+				if(pal[1].equalsIgnoreCase("C4") || pal[1] == null){
+					juego = new Jugar(new FactoriaJuegoConecta4());
+				}
+				else if(pal[1].equalsIgnoreCase("CO")){
+					juego = new Jugar(new FactoriaJuegoComplica());
+				}
+			}
+		}
+		if(pal.length == 4){
+			if(pal[1].equalsIgnoreCase("GR")){
+				if(pal[2] != null){
+					juego = new Jugar(new FactoriaJuegoGravity(Integer.parseInt(pal[2]), Integer.parseInt(pal[3])));
+				}
+				else{
+					juego = new Jugar(new FactoriaJuegoGravity());
+				}
+			}
+		}
+		return juego;
+	}
+
+	public String textoAyuda() {
+		return "JUGAR: Permite jugar al juego que se desee";
+	}
+
+}
